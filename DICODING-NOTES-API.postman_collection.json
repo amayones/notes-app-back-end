@@ -1,0 +1,398 @@
+{
+	"info": {
+		"_postman_id": "f6b2a961-bf6a-4494-bee6-083adcf17b53",
+		"name": "DICODING-NOTES-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41771411"
+	},
+	"item": [
+		{
+			"name": "ADD NOTES",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('status', 'message', 'data');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Data object should contain a noteId\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.data).to.exist.and.to.be.an('object');\r",
+							"    pm.expect(responseData.data.noteId).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"noteId should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"NoteId is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.data).to.exist.and.to.be.an('object');\r",
+							"    pm.expect(responseData.data.noteId).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"NoteId should not be empty\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Catatan X\",\r\n    \"tags\": [\r\n        \"Cloud\",\r\n        \"Pipeline\"\r\n        ],\r\n    \"body\": \"Isi dari catatan X\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://13.214.135.22:5000/notes",
+					"protocol": "http",
+					"host": [
+						"13",
+						"214",
+						"135",
+						"22"
+					],
+					"port": "5000",
+					"path": [
+						"notes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ALL NOTES",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has required fields: status and data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('status', 'data');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the notes array in the data object\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.data).to.be.an('object').that.has.property('notes').that.is.an('array');\r",
+							"\r",
+							"    responseData.data.notes.forEach(note => {\r",
+							"        pm.expect(note).to.be.an('object');\r",
+							"        pm.expect(note).to.have.all.keys('title', 'tags', 'body', 'id', 'createdAt', 'updatedAt');\r",
+							"        pm.expect(note.title).to.be.a('string');\r",
+							"        pm.expect(note.body).to.be.a('string');\r",
+							"        pm.expect(note.id).to.be.a('string');\r",
+							"        pm.expect(note.createdAt).to.be.a('string');\r",
+							"        pm.expect(note.updatedAt).to.be.a('string');\r",
+							"        pm.expect(note.tags).to.be.an('array');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Each note has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.data).to.exist.and.to.have.property('notes').that.is.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.data.notes.forEach(note => {\r",
+							"        pm.expect(note).to.be.an('object');\r",
+							"        pm.expect(note).to.have.all.keys('title', 'tags', 'body', 'id', 'createdAt', 'updatedAt');\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Catatan A\",\r\n    \"tags\": [\r\n        \"Android\",\r\n        \"Web\"\r\n        ],\r\n    \"body\": \"Isi dari catatan A\"\r\n}"
+				},
+				"url": {
+					"raw": "http://13.214.135.22:5000/notes",
+					"protocol": "http",
+					"host": [
+						"13",
+						"214",
+						"135",
+						"22"
+					],
+					"port": "5000",
+					"path": [
+						"notes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DETAIL NOTES",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response content type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response schema is valid and contains required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('status');\r",
+							"    pm.expect(responseData).to.have.property('data').that.is.an('object');\r",
+							"    pm.expect(responseData.data).to.have.property('note').that.is.an('object');\r",
+							"\r",
+							"    const note = responseData.data.note;\r",
+							"    pm.expect(note).to.have.all.keys('title', 'tags', 'body', 'id', 'createdAt', 'updatedAt');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Tags is an array and contains only non-empty strings\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.data.note.tags).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.data.note.tags.forEach(tag => {\r",
+							"        pm.expect(tag).to.be.a('string').that.is.not.empty;\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Catatan A\",\r\n    \"tags\": [\r\n        \"Android\",\r\n        \"Web\"\r\n        ],\r\n    \"body\": \"Isi dari catatan A\"\r\n}"
+				},
+				"url": {
+					"raw": "http://13.214.135.22:5000/notes/6aF7228_jJstZUZ2",
+					"protocol": "http",
+					"host": [
+						"13",
+						"214",
+						"135",
+						"22"
+					],
+					"port": "5000",
+					"path": [
+						"notes",
+						"6aF7228_jJstZUZ2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EDIT NOTES",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields: status and message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('status', 'message');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status must be a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Message must be a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Catatan X\",\r\n    \"tags\": [\r\n        \"Sigma\",\r\n        \"Culture\"\r\n        ],\r\n    \"body\": \"Isi dari catatan X\"\r\n}"
+				},
+				"url": {
+					"raw": "http://13.214.135.22:5000/notes/vEi4p6ktsa_Zfvx5",
+					"protocol": "http",
+					"host": [
+						"13",
+						"214",
+						"135",
+						"22"
+					],
+					"port": "5000",
+					"path": [
+						"notes",
+						"vEi4p6ktsa_Zfvx5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE NOTES",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has required fields: status and message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('status', 'message');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Message is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://13.214.135.22:5000/notes/vEi4p6ktsa_Zfvx5",
+					"protocol": "http",
+					"host": [
+						"13",
+						"214",
+						"135",
+						"22"
+					],
+					"port": "5000",
+					"path": [
+						"notes",
+						"vEi4p6ktsa_Zfvx5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
